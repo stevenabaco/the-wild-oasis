@@ -3,6 +3,7 @@ import { cloneElement, createContext, useContext, useEffect, useState } from "re
 import { createPortal } from "react-dom";
 import { HiXMark } from "react-icons/hi2";
 import styled from "styled-components";
+import { useOutsideClick } from "../hooks/useOutsideClick";
 
 const StyledModal = styled.div`
 	position: fixed;
@@ -72,25 +73,8 @@ function Open({ children, opens: opensWindowName }) {
 }
 
 function Window({ children, name }) { // name is the name of the window
-	const { openName, close } = useContext(ModalContext); //
-
-	const ref = useRef(); // This is a hook that creates a reference to the DOM element
-
-	useEffect(
-		function () { // This is a hook that runs after the component is mounted
-			function handleClick(e) { // This is a function that runs when the user clicks on the document
-				if (ref.current && !ref.current.contains(e.target)) { // If the user clicks outside the modal
-          console.log("Click Outside");
-					close();// Close the modal
-				}
-      }
-
-      document.addEventListener("click", handleClick, true); // true means that the event will be dispatched to the registered listener before being dispatched to any EventTarget beneath it in the DOM tree.
-
-			return () => document.removeEventListener("click", handleClick, true); // true means that the event will be dispatched to the registered listener before being dispatched to any EventTarget beneath it in the DOM tree.
-		},
-		[close]
-	);
+  const { openName, close } = useContext(ModalContext); // openName is the name of the open window
+  const ref = useOutsideClick(close); // This is a hook that runs after the component is mounted
 
 	if (name !== openName) return null; // If the name of the window is not the same as the name of the open window, return null
 
