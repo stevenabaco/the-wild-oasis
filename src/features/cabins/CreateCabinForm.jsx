@@ -1,4 +1,3 @@
-
 import { useForm } from "react-hook-form";
 
 import Input from "../../ui/Input";
@@ -11,32 +10,48 @@ import FormRow from "../../ui/FormRow";
 import { useCreateCabin } from "./useCreateCabin";
 import { useEditCabin } from "./useEditCabin";
 
-function CreateCabinForm({ cabinToEdit = {} }) {
+function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
 	const { isCreating, createCabin } = useCreateCabin();
-	const { isEditing, editCabin} = useEditCabin();
+	const { isEditing, editCabin } = useEditCabin();
 	const isWorking = isCreating || isEditing;
 
 	const { id: editId, ...editValues } = cabinToEdit;
 	const isEditSession = Boolean(editId);
-	
+
 	const { register, handleSubmit, reset, getValues, formState } = useForm({
 		defaultValues: isEditSession ? editValues : {},
 	});
 	const { errors } = formState;
-	
+
 	function onSubmit(data) {
 		//check if image is already uploaded.
 		const image = typeof data.image === "string" ? data.image : data.image[0];
 
-		if (isEditSession) editCabin(
-			{ newCabinData: { ...data, image }, id: editId },
-			{ onSuccess: (data) => reset() }
-		);
-		else createCabin({ ...data, image: image }, {onSuccess: (data) => reset()});
+		if (isEditSession)
+			editCabin(
+				{ newCabinData: { ...data, image }, id: editId },
+				{
+					onSuccess: (data) => {
+						reset();
+						onCloseModal?.();
+					},
+				}
+			);
+		else
+			createCabin(
+				{ ...data, image: image },
+				{
+					onSuccess: (data) => {
+						reset();
+						onCloseModal?.();
+					},
+				}
+			);
 	}
 
 	return (
-		<Form onSubmit={handleSubmit(onSubmit)}>
+		<Form onSubmit={handleSubmit(onSubmit)} type={onCloseModal ? "modal" : "regular"}>
+			
 			<FormRow
 				label="Cabin name"
 				error={errors?.name?.message}
@@ -130,6 +145,8 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 				<Button
 					variation="secondary"
 					type="reset"
+					disabled={isWorking}
+					onClick={() => onCloseModal?.()}
 				>
 					Cancel
 				</Button>
