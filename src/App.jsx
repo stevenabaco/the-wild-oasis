@@ -12,6 +12,7 @@ import AppLayout from "./ui/AppLayout";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
+import Booking from "./pages/Booking";
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -46,6 +47,10 @@ function App() {
 						<Route
 							path="bookings"
 							element={<Bookings />}
+						/>
+						<Route
+							path="bookings/:bookingId"
+							element={<Booking />}
 						/>
 						<Route
 							path="cabins"
@@ -87,11 +92,11 @@ function App() {
 						duration: 5000,
 					},
 					steyle: {
-						fontSize: '16px',
-						maxWidth: '500px',
-						padding: '16px 24px',
-						backgroundColor: 'var(--color-grey-0)',
-						color: 'var(--color-grey-700)',
+						fontSize: "16px",
+						maxWidth: "500px",
+						padding: "16px 24px",
+						backgroundColor: "var(--color-grey-0)",
+						color: "var(--color-grey-700)",
 					},
 				}}
 			/>
