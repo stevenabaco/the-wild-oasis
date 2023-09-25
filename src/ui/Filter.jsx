@@ -16,7 +16,7 @@ const FilterButton = styled.button`
 	border: none;
 
 	${(props) =>
-		props.active &&
+		props.active === "active" &&
 		css`
 			background-color: var(--color-brand-600);
 			color: var(--color-brand-50);
@@ -35,30 +35,31 @@ const FilterButton = styled.button`
 	}
 `;
 
-
 function Filter({ filterField, options }) {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const currentFilter = searchParams.get(filterField) || options[0].value;
+	const [searchParams, setSearchParams] = useSearchParams();
+	const currentFilter = searchParams.get(filterField) || options[0].value;
 
-  function handleClick(value) {
-    searchParams.set('discount', value);
-    setSearchParams(searchParams);
-  }
+	function handleClick(value) {
+		searchParams.set(filterField, value);
+		if (searchParams.get("page")) searchParams.set("page", 1);
 
-  return (
-    <StyledFilter>
-      {options.map((option) => (
-        <FilterButton
-          key={option.value}
-          onClick={() => handleClick(option.value)}
-          active={currentFilter === option.value}
-          disabled={currentFilter === option.value}
-        >
-          {option.label}
-        </FilterButton>
-      ))}
-    </StyledFilter>
-  );
+		setSearchParams(searchParams);
+	}
+
+	return (
+		<StyledFilter>
+			{options.map((option) => (
+				<FilterButton
+					key={option.value}
+					onClick={() => handleClick(option.value)}
+					active={option.value === currentFilter ? "active" : "default"}
+					disabled={option.value === currentFilter}
+				>
+					{option.label}
+				</FilterButton>
+			))}
+		</StyledFilter>
+	);
 }
 
 export default Filter;
