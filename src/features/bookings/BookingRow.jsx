@@ -12,7 +12,7 @@ import ConfirmDelete from "../../ui/ConfirmDelete";
 import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
 import { useCheckout } from "../check-in-out/useCheckout";
-// import { useDeleteBooking } from "./useDeleteBooking";
+import { useDeleteBooking } from "./useDeleteBooking";
 
 const Cabin = styled.div`
 	font-size: 1.6rem;
@@ -57,7 +57,7 @@ function BookingRow({
 }) {
 	const navigate = useNavigate();
 	const { checkout, isCheckingOut } = useCheckout();
-	// const { deleteBooking, isDeleting } = useDeleteBooking();
+	const { deleteBooking, isDeleting } = useDeleteBooking();
 
 	const statusToTagName = {
 		unconfirmed: "blue",
@@ -125,13 +125,13 @@ function BookingRow({
 					</Menus.List>
 				</Menus.Menu>
 
-				{/* <Modal.Window name="delete">
+				<Modal.Window name="delete">
 					<ConfirmDelete
 						resourceName="booking"
 						disabled={isDeleting}
 						onConfirm={() => deleteBooking(bookingId)}
 					/>
-				</Modal.Window> */}
+				</Modal.Window>
 			</Modal>
 		</Table.Row>
 	);
