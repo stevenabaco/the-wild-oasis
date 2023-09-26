@@ -1,4 +1,4 @@
-import CheckinBooking from '../features/Check-in-out/CheckinBooking'
+import CheckinBooking from '../features/check-in-out/CheckinBooking'
 
 function Checkin() {
     return (
@@ -6,4 +6,4 @@ function Checkin() {
     )
 }
 
-export default Checkin
+export default Checkin;
